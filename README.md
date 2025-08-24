@@ -1,3 +1,25 @@
+# Connecting two EC2 from separate VPC using VPC Peering
+This project shows how to connect two EC2 from separate VPC using VPC Peering with Infrastructure as a Service Terraform.
+
+## Project Diagram
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## NOTE - SECURITY !!!
 * The Terraform state file will contain the private key in plain text.
 
