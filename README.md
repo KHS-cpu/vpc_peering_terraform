@@ -1,32 +1,104 @@
 # Connecting two EC2 from separate VPC using VPC Peering
-This project shows how to connect two EC2 from separate VPC using VPC Peering with Infrastructure as a Service Terraform.
+This project shows how to connect two EC2 from separate VPC using VPC Peering with Infrastructure as a Service Terraform. It demonstrates modular design by separating reusable infrastructure into modules (```hellocloud-app-aws``` and ```hellocloud-app-aws-2```), and then wiring them together from a root module.
 
+The setup includes:
+- VPC networking and subnets
+- EC2 instances and key pairs
+- Security groups and networking rules
+- Reusable module design for different environments or applications
+- Optional VPC Peering between the two environments
+
+---
 ## Project Diagram
+![Diagram](assets/vpc_peering_terraform.png)
 
+---
 
+## Project Description
+The goal of this project is to showcase Infrastructure as Code (IaC) Terraform how it works with module output on AWS. It creates two separate environments (```hellocloud-app-aws``` and ```hellocloud-app-aws-2```) that can represent:
 
+- Module 1 (```hellocloud-app-aws```) → Core application environment (VPC, EC2 instances, networking).
+- Module 2 (```hellocloud-app-aws-2```) → Secondary environment (could be staging, DR site, or another service).
+- Root module → Integrates both environments and configures cross-connection (VPC Peering).
 
+This project can be extended to:
+- Deploy production-like multi-tier apps
+- Simulate hybrid networking with VPC peering
+- Serve as a reusable Terraform template
 
+---
 
+## Usage
+Clone the repository:
+```
+git clone https://github.com/KHS-cpu/vpc_peering_terraform.git
+cd vpc_peering_terraform
+```
+Initialize Terraform:
+```
+terraform init
+```
+Plan the changes:
+```
+terraform plan
+```
+Apply the infrastructure:
+```
+terraform apply
+```
+Destroy the infrastructure when done:
+```
+terraform destroy
+```
+---
 
-
-
-
-
-
-
-
-
+## Folder Structure
+```
+.
+├── README.md
+├── main.tf              # Root module entrypoint
+├── outputs.tf           # Root outputs
+├── terraform.tfvars     # Root variables values
+├── variables.tf         # Root variables
+├── versions.tf          # Provider/Terraform version
+├── vpc_peering.tf       # Connects hellocloud-app-aws and hellocloud-app-aws-2
+│
+├── hellocloud-app-aws/              # Module 1
+│   ├── README.md
+│   ├── assets/
+│   ├── example/
+│   ├── files/
+│   ├── data.tf
+│   ├── instance.tf
+│   ├── keypair.tf
+│   ├── outputs.tf
+│   ├── terraform.tfvars
+│   ├── terraform.tfvars.example
+│   ├── variables.tf
+│   ├── versions.tf
+│   └── vpc.tf
+│
+└── hellocloud-app-aws-2/            # Module 2
+    ├── main.tf
+    ├── outputs.tf
+    ├── terraform.tfvars
+    ├── variables.tf
+    └── versions.tf
+```
+---
+## Architecture
+- **Root Module**
+  - Calls both ```hellocloud-app-aws``` and ```hellocloud-app-aws-2```
+  - Manages VPC peering between them
+- **Module 1 (```hellocloud-app-aws```)**
+  - Creates VPC, subnets, EC2 instance, and key pairs
+- **Module 2 (```hellocloud-app-aws-2```)**
+  - Creates an additional VPC and workloads (lighter version of Module 1)
 
 
 
 ## NOTE - SECURITY !!!
 * The Terraform state file will contain the private key in plain text.
-
-### To git clone a specific branch from a remote repository
-```
-git clone -b hellocloud-app-aws --single-branch git@gitlab.com:sailinnthu/terraform-aws-bastion-host.git hellocloud-app-aws
-```
 
 ### See all state contents (will show private key)
 ```
